@@ -62,8 +62,8 @@
                                 <a href="#eligibility" class="btn btn-primary btn-lg me-3">
                                     <i class="fas fa-file-medical me-2" style="padding:10px"></i>View Requirements
                                 </a>
-                                <a href="{{ route('application') }}" class="btn btn-outline-light btn-lg">
-                                    <i class="fas fa-calendar-check me-2" style="padding:10px"></i>Apply Now
+                                <a href="{{ route('register') }}" class="btn btn-outline-light btn-lg">
+                                    <i class="fas fa-user-plus me-2" style="padding:10px"></i>Register Now
                                 </a>
                             </div>
                         </div>
@@ -370,7 +370,7 @@
             }
 
             .btn-outline-light:hover {
-                background: rgba(255, 255, 255, 0.1);
+                background: rgba(250, 249, 249, 0.1);
                 border-color: white;
                 transform: translateY(-3px);
             }

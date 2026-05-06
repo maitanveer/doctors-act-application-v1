@@ -57,7 +57,7 @@
             </div>
             
             <center>
-                <a href="{{ url('/application/edit/' . $application->application_id) }}" class="btn">
+                <a href="{{ route('application.edit', $application->application_id) }}" class="btn">
                     Update Application Now
                 </a>
             </center>

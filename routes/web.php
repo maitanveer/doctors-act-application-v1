@@ -355,8 +355,16 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['role:user'])->group(function () {
     Route::get('/user/dashboard', [UserDashboardController::class, 'dashboard'])->name('user.dashboard');
     Route::get('/user/applications/{id}', [UserDashboardController::class, 'showApplication'])->name('user.applications.show');
-    Route::get('/application/{application_id}/edit', [ApplicationController::class, 'editApplication'])->name('application.edit');
-    Route::post('/application/{application_id}/update', [ApplicationController::class, 'updateApplication'])->name('application.update');
+    Route::get('/application/edit/{application_id}', [ApplicationController::class, 'editApplication'])
+        ->where('application_id', 'TDA-[0-9]{4}-[A-Z0-9]{8}')
+        ->name('application.edit');
+    Route::post('/application/update/{application_id}', [ApplicationController::class, 'updateApplication'])
+        ->where('application_id', 'TDA-[0-9]{4}-[A-Z0-9]{8}')
+        ->name('application.update');
+    Route::get('/application/{application_id}/edit', [ApplicationController::class, 'editApplication'])
+        ->where('application_id', 'TDA-[0-9]{4}-[A-Z0-9]{8}');
+    Route::post('/application/{application_id}/update', [ApplicationController::class, 'updateApplication'])
+        ->where('application_id', 'TDA-[0-9]{4}-[A-Z0-9]{8}');
 });
 
 // ========== Admin Routes (Protected by Role Middleware) ==========

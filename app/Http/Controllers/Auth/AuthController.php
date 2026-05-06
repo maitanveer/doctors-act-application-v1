@@ -91,9 +91,7 @@ class AuthController extends Controller
             'is_active' => true,
         ]);
 
-        Auth::login($user);
-
-        return redirect()->route('home')->with('success', 'Registration successful! Welcome to Ibn Sina Foundation.');
+        return redirect()->route('login')->with('success', 'Registration successful. Please log in to continue to your dashboard.');
     }
 
     /**
@@ -114,11 +112,11 @@ class AuthController extends Controller
     private function redirectBasedOnRole($user)
     {
         if ($user->role === 'superadmin' || $user->role === 'admin') {
-            return redirect()->route('admin.dashboard')->with('success', 'Welcome back, ' . $user->name . '!');
+            return redirect()->intended(route('admin.dashboard'))->with('success', 'Welcome back, ' . $user->name . '!');
         }
 
         // Regular users go to user dashboard
-        return redirect()->route('user.dashboard')->with('success', 'Welcome back, ' . $user->name . '!');
+        return redirect()->intended(route('user.dashboard'))->with('success', 'Welcome back, ' . $user->name . '!');
     }
 
     /**

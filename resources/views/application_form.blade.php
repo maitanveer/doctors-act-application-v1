@@ -888,8 +888,8 @@
 
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="uploadDocument">Upload Lisence Document</label>
-                                <input type="file" id="uploadDocument" name="uploadDocument" accept=".pdf,.doc,.docx,.txt,.xls,.xlsx,.csv,image/*">
+                                <label class="required" for="uploadDocument">Upload Lisence Document</label>
+                                <input type="file" id="uploadDocument" name="uploadDocument" required accept=".pdf,.doc,.docx,.txt,.xls,.xlsx,.csv,image/*" onchange="validateFileSize(this, 5, 'uploadDocumentError')">
                                 <div class="validation-error" id="uploadDocumentError">Please upload a document</div>
                             </div>
                         </div>
@@ -1124,6 +1124,13 @@
                         </div>
 
                         <div id="jobOfferFields" class="hidden">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <p style="margin: 0 0 12px; color: #0b5ed7; font-weight: 600;">
+                                        Selecting Yes makes the job offer letter required in Section H and in the final review step.
+                                    </p>
+                                </div>
+                            </div>
                             <div class="form-row">
                                 <div class="form-group">
                                     <label class="required" for="employerName">Employer Name</label>
@@ -1455,8 +1462,8 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="padding:8px">Job offer letter from Texas facility</td>
-                                    <td style="padding:8px">If Job Offer = Yes</td>
+                                    <td id="docJobOfferLabel" style="padding:8px">Job offer letter from Texas facility</td>
+                                    <td id="docJobOfferRequirementLabel" style="padding:8px">No</td>
                                     <td style="padding:8px">
                                         <input type="file" id="doc_job_offer" name="doc_job_offer" accept=".pdf,.doc,.docx,.txt,.xls,.xlsx,.csv,image/*" onchange="validateFileSize(this, 2, 'doc_job_offerError')">
                                         <div class="validation-error" id="doc_job_offerError" style="display:none">Job offer letter is required when Job Offer is Yes and must be 2MB or smaller</div>
@@ -1664,14 +1671,24 @@
                 document.querySelectorAll('input[name="jobOffer"]').forEach(radio => {
                     radio.addEventListener('change', function() {
                         const jobOfferDocument = document.getElementById('doc_job_offer');
+                        const jobOfferLabel = document.getElementById('docJobOfferLabel');
+                        const jobOfferRequirementLabel = document.getElementById('docJobOfferRequirementLabel');
                         if (this.value === 'Yes') {
                             document.getElementById('jobOfferFields').classList.remove('hidden');
                             if (jobOfferDocument) jobOfferDocument.required = true;
+                            if (jobOfferLabel) {
+                                jobOfferLabel.innerHTML = 'Job offer letter from Texas facility <span style="color:#dc3545">*</span>';
+                            }
+                            if (jobOfferRequirementLabel) jobOfferRequirementLabel.textContent = 'Yes';
                         } else {
                             document.getElementById('jobOfferFields').classList.add('hidden');
                             if (jobOfferDocument) {
                                 jobOfferDocument.required = false;
                             }
+                            if (jobOfferLabel) {
+                                jobOfferLabel.textContent = 'Job offer letter from Texas facility';
+                            }
+                            if (jobOfferRequirementLabel) jobOfferRequirementLabel.textContent = 'No';
                             // Clear job offer validation if switching to No
                             const jobOfferFields = [
                                 'employerName', 'facilityType', 'employerAddress', 'contactPerson',
@@ -1684,8 +1701,18 @@
 
                 const selectedJobOffer = document.querySelector('input[name="jobOffer"]:checked')?.value;
                 const jobOfferDocument = document.getElementById('doc_job_offer');
+                const jobOfferLabel = document.getElementById('docJobOfferLabel');
+                const jobOfferRequirementLabel = document.getElementById('docJobOfferRequirementLabel');
                 if (jobOfferDocument) {
                     jobOfferDocument.required = selectedJobOffer === 'Yes';
+                }
+                if (jobOfferLabel) {
+                    jobOfferLabel.innerHTML = selectedJobOffer === 'Yes'
+                        ? 'Job offer letter from Texas facility <span style="color:#dc3545">*</span>'
+                        : 'Job offer letter from Texas facility';
+                }
+                if (jobOfferRequirementLabel) {
+                    jobOfferRequirementLabel.textContent = selectedJobOffer === 'Yes' ? 'Yes' : 'No';
                 }
 
                 // Military service selection
@@ -2202,6 +2229,11 @@
                                     errors.push('disciplinaryExplanationError');
                                 }
                             }
+                        }
+                        if (!document.getElementById('uploadDocument')?.files?.length) {
+                            isValid = false;
+                            document.getElementById('uploadDocumentError').style.display = 'block';
+                            errors.push('uploadDocumentError');
                         }
                         break;
 
@@ -2737,6 +2769,7 @@
                 previewHTML += '<div class="preview-section">';
                 previewHTML += '<h5>Section F — Employment Details</h5>';
                 previewHTML += createPreviewRow('Job Offer in Texas', formData.jobOffer);
+                previewHTML += createPreviewRow('Job Offer Letter Requirement', formData.jobOffer === 'Yes' ? 'Required' : 'Not required');
                 
                 if (formData.jobOffer === 'Yes') {
                     previewHTML += createPreviewRow('Employer/Practice Name', formData.employerName);
@@ -2777,6 +2810,7 @@
                 // Section H - Consolidated Documents Checklist
                 previewHTML += '<div class="preview-section">';
                 previewHTML += '<h5>Section H — Consolidated Documents Checklist</h5>';
+                const hasJobOffer = formData.jobOffer === 'Yes';
                 const docKeys = [
                     {key: 'doc_passport', label: 'Passport copy'},
                     {key: 'doc_diploma', label: 'Medical degree diploma'},
@@ -2791,7 +2825,6 @@
                     {key: 'doc_usmle2', label: 'USMLE Step 2 score report'},
                     {key: 'doc_jurisprudence', label: 'Texas Jurisprudence Exam proof'},
                     {key: 'doc_english', label: 'English proficiency certificate'},
-                    {key: 'doc_job_offer', label: 'Job offer letter from Texas facility'},
                     {key: 'doc_contract', label: 'Contract (if available)'},
                     {key: 'doc_criminal', label: 'Criminal background check'},
                     {key: 'doc_police_clearance', label: 'Police clearance'},
@@ -2800,6 +2833,10 @@
                 docKeys.forEach(d => {
                     previewHTML += createPreviewRow(d.label, formData[d.key] || '');
                 });
+                previewHTML += createPreviewRow(
+                    'Job offer letter from Texas facility',
+                    hasJobOffer ? (formData.doc_job_offer || 'Required - not uploaded') : 'Not required'
+                );
                 previewHTML += '</div>';
 
                 // Section I - Attestation

@@ -6,6 +6,7 @@ use App\Mail\AdminNotification;
 use App\Mail\ApplicationSubmitted;
 use App\Models\Application;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
@@ -343,8 +344,8 @@ class ApplicationController extends Controller
             // Applicant Attestation
             'applicantSignature' => 'required|string|max:255',
             'signatureDate' => 'required|date',
-            // Optional uploaded documents (each max 2MB)
-            'uploadDocument' => 'nullable|file|mimes:pdf,jpg,jpeg,png,doc,docx,txt,xls,xlsx,csv|max:5120',
+            // Required uploaded documents
+            'uploadDocument' => 'required|file|mimes:pdf,jpg,jpeg,png,doc,docx,txt,xls,xlsx,csv|max:5120',
             'doc_passport' => 'required|file|mimes:pdf,jpg,jpeg,png,doc,docx,txt,xls,xlsx,csv|max:2048',
             'doc_diploma' => 'required|file|mimes:pdf,jpg,jpeg,png,doc,docx,txt,xls,xlsx,csv|max:2048',
             'doc_transcripts' => 'required|file|mimes:pdf,jpg,jpeg,png,doc,docx,txt,xls,xlsx,csv|max:2048',
@@ -371,6 +372,8 @@ class ApplicationController extends Controller
             'residencyTo.after' => 'Residency end date must be after start date.',
             'postResidencyYears.min' => 'Post-residency years must be at least 5 years.',
             'totalPracticeYears.min' => 'Total practice years must be at least 10 years.',
+            'uploadDocument.required' => 'The license document upload is required.',
+            'doc_job_offer.required_if' => 'The job offer letter is required when Job Offer is Yes.',
             'required_if' => 'This field is required when :other is selected.',
             'email' => 'Please enter a valid email address.',
         ]);
@@ -660,6 +663,7 @@ class ApplicationController extends Controller
     public function editApplication($application_id)
     {
         $application = Application::where('application_id', $application_id)
+            ->where('email', Auth::user()->email)
             ->where('objection_pending', true)
             ->firstOrFail();
 
@@ -711,6 +715,7 @@ class ApplicationController extends Controller
     public function updateApplication(Request $request, $application_id)
     {
         $application = Application::where('application_id', $application_id)
+            ->where('email', Auth::user()->email)
             ->where('objection_pending', true)
             ->firstOrFail();
 

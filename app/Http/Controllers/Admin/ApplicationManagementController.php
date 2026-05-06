@@ -47,7 +47,7 @@ class ApplicationManagementController extends Controller
             $query->whereDate('submission_date', '<=', $request->date_to);
         }
 
-        $applications = $query->latest('submission_date')->paginate(20);
+        $applications = $query->latest('submission_date')->paginate(20)->withQueryString();
 
         return view('admin.applications.index', compact('applications'));
     }
