@@ -7,83 +7,91 @@ use App\Http\Controllers\Admin\ApplicationManagementController;
 use App\Http\Controllers\UserDashboardController;
 use Illuminate\Support\Facades\Route;
 
+$renderPage = static function (string $view, string $pageTitle) {
+    if (view()->exists($view)) {
+        return view($view);
+    }
+
+    return response()->view('pages.unavailable', compact('pageTitle'), 404);
+};
+
 // Home Page
 Route::get('/', function () {
     return view('home');
 })->name('home');
 
 // About Us Routes
-Route::get('/aboutus', function () {
-    return view('pages.aboutus');
+Route::get('/aboutus', function () use ($renderPage) {
+    return $renderPage('pages.aboutus', 'About Us');
 })->name('aboutus');
 
-Route::get('/mentalhealthteam', function () {
-    return view('pages.mentalhealthteam');
+Route::get('/mentalhealthteam', function () use ($renderPage) {
+    return $renderPage('pages.mentalhealthteam', 'Mental Wellness Team');
 })->name('mentalhealthteam');
 
-Route::get('/specialistteam', function () {
-    return view('pages.specialistteam');
+Route::get('/specialistteam', function () use ($renderPage) {
+    return $renderPage('pages.specialistteam', 'Team of Specialists');
 })->name('specialistteam');
 
-Route::get('/medicalteam', function () {
-    return view('pages.medicalteam');
+Route::get('/medicalteam', function () use ($renderPage) {
+    return $renderPage('pages.medicalteam', 'Medical Team');
 })->name('medicalteam');
 
-Route::get('/dentalteam', function () {
-    return view('pages.dentalteam');
+Route::get('/dentalteam', function () use ($renderPage) {
+    return $renderPage('pages.dentalteam', 'Dental Team');
 })->name('dentalteam');
 
-Route::get('/partners', function () {
-    return view('pages.partners');
+Route::get('/partners', function () use ($renderPage) {
+    return $renderPage('pages.partners', 'Partners');
 })->name('partners');
 
-Route::get('/proclamations', function () {
-    return view('pages.proclamations');
+Route::get('/proclamations', function () use ($renderPage) {
+    return $renderPage('pages.proclamations', 'Proclamations');
 })->name('proclamations');
 
 // News and Media Routes
-Route::get('/upcomingevents', function () {
-    return view('pages.upcomingevents');
+Route::get('/upcomingevents', function () use ($renderPage) {
+    return $renderPage('pages.upcomingevents', 'Upcoming Events');
 })->name('upcomingevents');
 
-Route::get('/news', function () {
-    return view('pages.news');
+Route::get('/news', function () use ($renderPage) {
+    return $renderPage('pages.news', 'News');
 })->name('news');
 
-Route::get('/eventvideos', function () {
-    return view('pages.eventvideos');
+Route::get('/eventvideos', function () use ($renderPage) {
+    return $renderPage('pages.eventvideos', 'Event Videos');
 })->name('eventvideos');
 
-Route::get('/photogallery', function () {
-    return view('pages.photogallery');
+Route::get('/photogallery', function () use ($renderPage) {
+    return $renderPage('pages.photogallery', 'Photo Gallery');
 })->name('photogallery');
 
 // Leadership Routes
-Route::get('/boardofdirectors', function () {
-    return view('pages.boardofdirectors');
+Route::get('/boardofdirectors', function () use ($renderPage) {
+    return $renderPage('pages.boardofdirectors', 'Board of Directors');
 })->name('boardofdirectors');
 
-Route::get('/managementteam', function () {
-    return view('pages.managementteam');
+Route::get('/managementteam', function () use ($renderPage) {
+    return $renderPage('pages.managementteam', 'Management Team');
 })->name('managementteam');
 
 // Services Routes
-Route::get('/mentalhealthservices', function () {
-    return view('services.mentalhealth');
+Route::get('/mentalhealthservices', function () use ($renderPage) {
+    return $renderPage('services.mentalhealth', 'Behavioral Health Services');
 })->name('mentalhealthservices');
 
 // Medical Routes
-Route::prefix('medical')->group(function () {
-    Route::get('/', function () {
-        return view('services.medical.index');
+Route::prefix('medical')->group(function () use ($renderPage) {
+    Route::get('/', function () use ($renderPage) {
+        return $renderPage('services.medical.index', 'Medical Services');
     })->name('medical.index');
 
-    Route::get('/medical-healthcare-discounts-program', function () {
-        return view('services.medical.discounts');
+    Route::get('/medical-healthcare-discounts-program', function () use ($renderPage) {
+        return $renderPage('services.medical.discounts', 'Medical Discount Programs');
     })->name('medical.discounts');
 
-    Route::get('/immigrationphysical', function () {
-        return view('services.medical.immigration');
+    Route::get('/immigrationphysical', function () use ($renderPage) {
+        return $renderPage('services.medical.immigration', 'Immigration Physicals');
     })->name('medical.immigration');
 });
 
@@ -151,53 +159,53 @@ Route::prefix('medical')->group(function () {
     })->name('test.submit.file');
 
 // Dental Routes
-Route::prefix('dental')->group(function () {
-    Route::get('/', function () {
-        return view('services.dental.index');
+Route::prefix('dental')->group(function () use ($renderPage) {
+    Route::get('/', function () use ($renderPage) {
+        return $renderPage('services.dental.index', 'Dental Services');
     })->name('dental.index');
 
-    Route::get('/dentures-implants', function () {
-        return view('services.dental.dentures');
+    Route::get('/dentures-implants', function () use ($renderPage) {
+        return $renderPage('services.dental.dentures', 'Dentures and Implants');
     })->name('dental.dentures-implants');
 
-    Route::get('/dental-annual-discount-program', function () {
-        return view('services.dental.discounts');
+    Route::get('/dental-annual-discount-program', function () use ($renderPage) {
+        return $renderPage('services.dental.discounts', 'Dental Discount Programs');
     })->name('dental.discounts');
 });
 
 // Title V Routes
-Route::get('/titlevChild', function () {
-    return view('services.titlev.children');
+Route::get('/titlevChild', function () use ($renderPage) {
+    return $renderPage('services.titlev.children', 'Children and Adolescent Services');
 })->name('titlev.children');
 
-Route::get('/titlevPrenatal', function () {
-    return view('services.titlev.prenatal');
+Route::get('/titlevPrenatal', function () use ($renderPage) {
+    return $renderPage('services.titlev.prenatal', 'Prenatal and Postpartum Services');
 })->name('titlev.prenatal');
 
 // Other Services
-Route::get('/diagnostic', function () {
-    return view('services.diagnostic');
+Route::get('/diagnostic', function () use ($renderPage) {
+    return $renderPage('services.diagnostic', 'Diagnostic Services');
 })->name('diagnostic');
 
-Route::get('/speciality', function () {
-    return view('services.speciality');
+Route::get('/speciality', function () use ($renderPage) {
+    return $renderPage('services.speciality', 'Specialty Services');
 })->name('speciality');
 
-Route::get('/children', function () {
-    return view('services.children');
+Route::get('/children', function () use ($renderPage) {
+    return $renderPage('services.children', 'Children Services');
 })->name('children');
 
 // Other Pages
-Route::get('/clinicalrotations', function () {
-    return view('pages.clinicalrotations');
+Route::get('/clinicalrotations', function () use ($renderPage) {
+    return $renderPage('pages.clinicalrotations', 'Clinical Rotations');
 })->name('clinicalrotations');
 
-Route::get('/locations', function () {
-    return view('pages.locations');
+Route::get('/locations', function () use ($renderPage) {
+    return $renderPage('pages.locations', 'Locations');
 })->name('locations');
 
-Route::get('/contact', function () {
-    return view('pages.contact');
+Route::get('/contact', function () use ($renderPage) {
+    return $renderPage('pages.contact', 'Contact Us');
 })->name('contact');
 
 Route::get('/doc-act', function () {
@@ -406,4 +414,3 @@ Route::prefix('admin')->middleware(['role:admin,superadmin'])->group(function ()
         Route::delete('/{id}', [AdminController::class, 'deleteUser'])->name('admin.users.delete');
     });
 });
-

@@ -1281,7 +1281,7 @@
                         </div>
                         <h4 class="resource-title text-white">Texas Medical Board (TMB)</h4>
                         <p class="resource-description">Primary regulatory authority for medical licensure</p>
-                        <a href="#" class="resource-link">Visit TMB Website <i
+                        <a href="https://www.tmb.state.tx.us/" class="resource-link" target="_blank" rel="noopener noreferrer">Visit TMB Website <i
                                 class="fas fa-external-link-alt"></i></a>
                     </div>
 
@@ -1291,7 +1291,7 @@
                         </div>
                         <h4 class="resource-title text-white">Texas Legislature – HB 2038</h4>
                         <p class="resource-description">Official bill text and legislative history</p>
-                        <a href="#" class="resource-link">View Bill Text <i
+                        <a href="https://capitol.texas.gov/" class="resource-link" target="_blank" rel="noopener noreferrer">View Bill Text <i
                                 class="fas fa-external-link-alt"></i></a>
                     </div>
 
@@ -1301,7 +1301,7 @@
                         </div>
                         <h4 class="resource-title">Texas Register</h4>
                         <p class="resource-description">Rulemaking updates and official notices</p>
-                        <a href="#" class="resource-link">Check Updates <i
+                        <a href="https://www.sos.state.tx.us/texreg/" class="resource-link" target="_blank" rel="noopener noreferrer">Check Updates <i
                                 class="fas fa-external-link-alt"></i></a>
                     </div>
 
@@ -1311,7 +1311,7 @@
                         </div>
                         <h4 class="resource-title">HRSA Designations</h4>
                         <p class="resource-description">HPSA/MUA official designations</p>
-                        <a href="#" class="resource-link">Find Areas <i class="fas fa-external-link-alt"></i></a>
+                        <a href="https://data.hrsa.gov/" class="resource-link" target="_blank" rel="noopener noreferrer">Find Areas <i class="fas fa-external-link-alt"></i></a>
                     </div>
                 </div>
             </div>
@@ -1327,8 +1327,8 @@
                             process</p>
                     </div>
                     <div class="col-lg-4 text-lg-end">
-                        <a href="{{ route('contact') }}" class="btn btn-dark btn-lg">
-                            <i class="fas fa-calendar-check me-2"></i> Schedule Consultation
+                        <a href="{{ route('application') }}" class="btn btn-dark btn-lg">
+                            <i class="fas fa-file-medical me-2"></i> Go to the Application
                         </a>
                     </div>
                 </div>
@@ -2308,7 +2308,7 @@
 
             /* Home page specific styles */
             .hero-section {
-                background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/assets/img/hero-bg.jpg');
+                background: linear-gradient(135deg, #001f3f, #003366);
                 background-size: cover;
                 background-position: center;
                 color: white;
